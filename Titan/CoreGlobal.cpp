@@ -1,41 +1,33 @@
 /**********************************************************************************************************************
-* @file  GameServer.cpp
+* @file  CoreGlobal.cpp
 *
-* @brief 프로그램 실행 시작 파일
+* @brief CoreGlobal 클래스 cpp 파일
 *
-* @date  2025.02.15
+* @date  2025.02.16
 **********************************************************************************************************************/
 
 
 #include "pch.h"
+#include "CoreGlobal.h"
 #include "ThreadManager.h"
 
 
-/// Core Global
-CoreGlobal coreGlobal;
+/// 쓰레드 매니져
+ThreadManager* GThreadManager = nullptr;
 
 
 /**********************************************************************************************************************
-* @brief Thread Main 테스트용 function
+* @brief 생성자
 **********************************************************************************************************************/
-void ThreadMain()
+CoreGlobal::CoreGlobal()
 {
-    while ( true )
-    {
-        cout << "Hello" << LThreadId << endl;
-        this_thread::sleep_for( 1s );
-    }
+	GThreadManager = new ThreadManager();
 }
 
 /**********************************************************************************************************************
-* @brief 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
+* @brief 소멸자
 **********************************************************************************************************************/
-int main()
+CoreGlobal::~CoreGlobal()
 {
-    for ( ExInt32 i = 0; i < 5; i++ )
-    {
-        GThreadManager->Lauch( ThreadMain );
-    }
-
-    GThreadManager->Join();
+	delete GThreadManager;
 }
