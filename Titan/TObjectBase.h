@@ -1,43 +1,33 @@
 /**********************************************************************************************************************
-* @file  RWSpinLock.h
+* @file  TObjectBase.h
 *
-* @brief RWSpinLock 클래스 h 파일
+* @brief TObjectBase 클래스 h 파일
 *
-* @date  2025.02.16
+* @date  2025.02.20
 **********************************************************************************************************************/
 
 
 #pragma once
 
 
-#include "Types.h"
-#include "LockType.h"
-
-
 /**********************************************************************************************************************
-* @class RWSpinLock
+* @class TObjectBase
 *
-* @brief RWSpinLock 클래스
+* @brief Titan 프로젝트 최상위 클래스
 **********************************************************************************************************************/
-class RWSpinLock : public Noncopyable
+class TObjectBase
 {
-private:
-	/// 락 플래그
-	ExAtomic< ExUInt32 > _lockFlag = EmptyMask;
-
-	/// 쓰기 잠금 횟수
-	ExUInt16 _writeCount = 0;
+public:
+	/// 소멸자
+	virtual ~TObjectBase() = default;
 
 public:
-	/// 쓰기 잠금
-	void WriteLock();
-
-	/// 쓰기 잠금 해제
-	void WriteUnlock();
-
-	/// 읽기 잠금
-	void ReadLock();
-
-	/// 읽기 잠금 해제
-	void ReadUnlock();
+	/// 캐스팅
+	template <typename T>
+	T* Cast()
+	{
+		// TODO. 추후 정적 캐스팅으로 변경필요. 필요하다면..
+		return dynamic_cast<T*>( this );
+	}
 };
+

@@ -172,6 +172,7 @@
     <ClInclude Include="RWLock.h" />
     <ClInclude Include="SpinLock.h" />
     <ClInclude Include="ThreadManager.h" />
+    <ClInclude Include="TObjectBase.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="WriteLockGuard.h" />
   </ItemGroup>

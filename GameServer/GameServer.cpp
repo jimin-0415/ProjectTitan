@@ -73,12 +73,101 @@ void ThreadMain2()
     }
 }
 
+class D : public TObjectBase
+{
+public:
+    virtual void Test()
+    {
+        cout << "TestA" << endl;
+    }
+
+    void Test2()
+    {
+        cout << "TestA2" << endl;
+    }
+};
+
+class A : public TObjectBase
+{
+public:
+    virtual void Test()
+    {
+        cout << "TestA" << endl;
+    }
+
+    void Test2()
+    {
+        cout << "TestA2" << endl;
+    }
+};
+
+class B : public A
+{
+public:
+    virtual void Test() override
+    {
+        cout << "TestB" << endl;
+    }
+
+    void Test2()
+    {
+        cout << "TestB2" << endl;
+    }
+};
+
+class C : public B
+{
+public:
+    virtual void Test() override
+    {
+        cout << "TestC" << endl;
+    }
+
+    void Test2()
+    {
+        cout << "TestC2" << endl;
+    }
+};
+
+
 /**********************************************************************************************************************
 * @brief 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 **********************************************************************************************************************/
 int main()
 {
-    for ( ExInt32 i = 0; i < 2; i++ )
+    A* a = new C();
+    C* c = a->Cast<C>();
+    C* c2 = dynamic_cast<C*>( a );
+
+    B* b = a->Cast<B>();
+    B* b2 = dynamic_cast<B*>( a );
+
+    C* bc = b->Cast<C>();
+    C* bc2 = dynamic_cast<C*>( b );
+
+    D* d = a->Cast<D>();
+    D* dc2 = dynamic_cast<D*>( a );
+    /*d->Test();
+    dc2->Test();*/
+
+    c->Test();
+    c2->Test();
+    b->Test();
+    b2->Test();
+    bc->Test();
+    bc2->Test();
+
+    c->Test2();
+    c2->Test2();
+    b->Test2();
+    b2->Test2();
+    bc->Test2();
+    bc2->Test2();
+
+    //C* c = a->Cast<C>();
+    //c->Test();
+
+    /*for ( ExInt32 i = 0; i < 2; i++ )
     {
         GThreadManager->Lauch( ThreadMain );
     }
@@ -88,5 +177,5 @@ int main()
         GThreadManager->Lauch( ThreadMain2 );
     }
 
-    GThreadManager->Join();
+    GThreadManager->Join();*/
 }

@@ -23,6 +23,7 @@
 #include <vector>
 #include <windows.h>
 #include "Types.h"
+#include "TObjectBase.h"
 #include "CoreGlobal.h"
 #include "CoreTLS.h"
 #include "CoreMacro.h"
