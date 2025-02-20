@@ -1,35 +1,31 @@
 /**********************************************************************************************************************
-* @file  CoreGlobal.cpp
+* @file  WriteLockGuard.cpp
 *
-* @brief CoreGlobal 클래스 cpp 파일
+* @brief WriteLockGuard 클래스 cpp 파일
 *
-* @date  2025.02.16
+* @date  2025.02.20
 **********************************************************************************************************************/
 
 
 #include "pch.h"
-#include "CoreGlobal.h"
-#include "ThreadManager.h"
-
-
-ThreadManager* GThreadManager = nullptr;
+#include "WriteLockGuard.h"
+#include "RWSpinLock.h"
 
 
 /**********************************************************************************************************************
 * @brief 생성자
 **********************************************************************************************************************/
-CoreGlobal::CoreGlobal()
+WriteLockGuard::WriteLockGuard( RWSpinLock& lock )
+:
+_lock( lock )
 {
-	/// 초기화 순서로 CoreGlobal 에서 전역 개체 관리
-	GThreadManager = new ThreadManager();
+	_lock.WriteLock();
 }
 
 /**********************************************************************************************************************
 * @brief 소멸자
 **********************************************************************************************************************/
-CoreGlobal::~CoreGlobal()
+WriteLockGuard::~WriteLockGuard()
 {
-	delete GThreadManager;
+	_lock.WriteUnlock();
 }
-
-CoreGlobal GCoreGlobal;

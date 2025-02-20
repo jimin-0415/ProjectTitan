@@ -10,6 +10,9 @@
     <Filter Include="Thread">
       <UniqueIdentifier>{49352bc1-c1cf-4635-bb53-c7d7119b8551}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lock">
+      <UniqueIdentifier>{e7b242d2-c34e-4d8b-8520-a968bc7198d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -17,9 +20,6 @@
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="CoreGlobal.h">
       <Filter>Main</Filter>
@@ -32,6 +32,33 @@
     </ClInclude>
     <ClInclude Include="ThreadManager.h">
       <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Noncopyable.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="RWSpinLock.h">
+      <Filter>Lock</Filter>
+    </ClInclude>
+    <ClInclude Include="LockType.h">
+      <Filter>Lock</Filter>
+    </ClInclude>
+    <ClInclude Include="RWLock.h">
+      <Filter>Lock</Filter>
+    </ClInclude>
+    <ClInclude Include="SpinLock.h">
+      <Filter>Lock</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadLockGuard.h">
+      <Filter>Lock</Filter>
+    </ClInclude>
+    <ClInclude Include="ILock.h">
+      <Filter>Lock</Filter>
+    </ClInclude>
+    <ClInclude Include="WriteLockGuard.h">
+      <Filter>Lock</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +76,21 @@
     </ClCompile>
     <ClCompile Include="ThreadManager.cpp">
       <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="RWSpinLock.cpp">
+      <Filter>Lock</Filter>
+    </ClCompile>
+    <ClCompile Include="RWLock.cpp">
+      <Filter>Lock</Filter>
+    </ClCompile>
+    <ClCompile Include="SpinLock.cpp">
+      <Filter>Lock</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadLockGuard.cpp">
+      <Filter>Lock</Filter>
+    </ClCompile>
+    <ClCompile Include="WriteLockGuard.cpp">
+      <Filter>Lock</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

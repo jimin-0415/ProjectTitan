@@ -1,7 +1,7 @@
 /**********************************************************************************************************************
-* @file  CoreGlobal.h
+* @file  SpinLock.h
 *
-* @brief CoreGlobal 클래스 h 파일
+* @brief SpinLock 클래스 h 파일
 *
 * @date  2025.02.16
 **********************************************************************************************************************/
@@ -10,23 +10,35 @@
 #pragma once
 
 
-/// 쓰레드 관리자 전역 개체
-extern class ThreadManager* GThreadManager;
+#include "Types.h"
+#include "LockType.h"
 
 
 /**********************************************************************************************************************
-* @class CoreGlobal
+* @class SpinLock
 *
-* @brief 전역 개체 클래스
+* @brief SpinLock 클래스
 **********************************************************************************************************************/
-class CoreGlobal
+class SpinLock : public ILock
 {
+private:
+	/// 락
+	ExAtomic< ExUInt32 > _lock;
+
 public:
 	/// 생성자
-	CoreGlobal();
+	SpinLock();
 
 	/// 소멸자
-	~CoreGlobal();
+	~SpinLock();
+
+public:
+	/// 잠금
+	virtual void Lock() override;
+
+	/// 해제
+	virtual void Unlock() override;
 };
 
-extern CoreGlobal GCoreGlobal;
+
+

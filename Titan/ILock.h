@@ -1,7 +1,7 @@
 /**********************************************************************************************************************
-* @file  CoreGlobal.h
+* @file  ILock.h
 *
-* @brief CoreGlobal 클래스 h 파일
+* @brief ILock h 파일
 *
 * @date  2025.02.16
 **********************************************************************************************************************/
@@ -10,23 +10,20 @@
 #pragma once
 
 
-/// 쓰레드 관리자 전역 개체
-extern class ThreadManager* GThreadManager;
+#include "CorePch.h"
 
 
 /**********************************************************************************************************************
-* @class CoreGlobal
+* @class ILock
 *
-* @brief 전역 개체 클래스
+* @brief Lock 인터페이스 
 **********************************************************************************************************************/
-class CoreGlobal
+class ILock : public Noncopyable
 {
 public:
-	/// 생성자
-	CoreGlobal();
-
-	/// 소멸자
-	~CoreGlobal();
+	/// 잠금
+	virtual void Lock()   = 0;
+	
+	/// 해제
+	virtual void Unlock() = 0;
 };
-
-extern CoreGlobal GCoreGlobal;

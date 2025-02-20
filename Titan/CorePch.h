@@ -21,10 +21,17 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <windows.h>
 #include "Types.h"
 #include "CoreGlobal.h"
 #include "CoreTLS.h"
 #include "CoreMacro.h"
+#include "Noncopyable.h"
+#include "LockType.h"
+#include "RWLock.h"
+#include "RWSpinLock.h"
+#include "ReadLockGuard.h"
+#include "WriteLockGuard.h"
 
 
 using namespace std;

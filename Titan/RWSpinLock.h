@@ -1,7 +1,7 @@
 /**********************************************************************************************************************
-* @file  CoreGlobal.h
+* @file  RWSpinLock.h
 *
-* @brief CoreGlobal 클래스 h 파일
+* @brief RWSpinLock 클래스 h 파일
 *
 * @date  2025.02.16
 **********************************************************************************************************************/
@@ -10,23 +10,34 @@
 #pragma once
 
 
-/// 쓰레드 관리자 전역 개체
-extern class ThreadManager* GThreadManager;
+#include "Types.h"
+#include "LockType.h"
 
 
 /**********************************************************************************************************************
-* @class CoreGlobal
+* @class Lock
 *
-* @brief 전역 개체 클래스
+* @brief RWSpinLock 클래스
 **********************************************************************************************************************/
-class CoreGlobal
+class RWSpinLock : public Noncopyable
 {
+private:
+	/// 락 플래그
+	ExAtomic< ExUInt32 > _lockFlag = EmptyMask;
+
+	/// 쓰기 잠금 횟수
+	ExUInt16 _writeCount = 0;
+
 public:
-	/// 생성자
-	CoreGlobal();
+	/// 쓰기 잠금
+	void WriteLock();
 
-	/// 소멸자
-	~CoreGlobal();
+	/// 쓰기 잠금 해제
+	void WriteUnlock();
+
+	/// 읽기 잠금
+	void ReadLock();
+
+	/// 읽기 잠금 해제
+	void ReadUnlock();
 };
-
-extern CoreGlobal GCoreGlobal;

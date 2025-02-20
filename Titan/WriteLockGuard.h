@@ -1,32 +1,34 @@
 /**********************************************************************************************************************
-* @file  CoreGlobal.h
+* @file  WriteLockGuard.h
 *
-* @brief CoreGlobal 클래스 h 파일
+* @brief WriteLockGuard 클래스 h 파일
 *
-* @date  2025.02.16
+* @date  2025.02.20
 **********************************************************************************************************************/
 
 
 #pragma once
 
 
-/// 쓰레드 관리자 전역 개체
-extern class ThreadManager* GThreadManager;
+class RWSpinLock;
 
 
 /**********************************************************************************************************************
-* @class CoreGlobal
+* @class WriteLockGuard
 *
-* @brief 전역 개체 클래스
+* @brief WriteLockGuard 클래스
 **********************************************************************************************************************/
-class CoreGlobal
+class WriteLockGuard : public Noncopyable
 {
+private:
+	/// 락
+	RWSpinLock& _lock;
+
 public:
 	/// 생성자
-	CoreGlobal();
+	WriteLockGuard( RWSpinLock& lock );
 
 	/// 소멸자
-	~CoreGlobal();
+	~WriteLockGuard();
 };
 
-extern CoreGlobal GCoreGlobal;

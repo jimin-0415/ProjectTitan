@@ -10,10 +10,42 @@
 #include "pch.h"
 #include "ThreadManager.h"
 
+class TestLock
+{
+private:
+    USE_LOCK;
 
-/// Core Global
-CoreGlobal coreGlobal;
+public:
+    int TestRead()
+    {
+        READ_LOCK;
 
+        if ( _queue.empty() )
+            return -1;
+
+        return _queue.front();
+    }
+
+    void TestPush()
+    {
+        WRITE_LOCK;
+
+        _queue.push( rand() % 100 );
+    }
+
+    void TestPop()
+    {
+        WRITE_LOCK;
+
+        if ( _queue.empty() == false )
+            _queue.pop();
+    }
+
+public:
+    queue<ExInt32> _queue;
+};
+
+TestLock testLock;
 
 /**********************************************************************************************************************
 * @brief Thread Main 테스트용 function
@@ -22,8 +54,22 @@ void ThreadMain()
 {
     while ( true )
     {
-        cout << "Hello" << LThreadId << endl;
+        testLock.TestPush();
         this_thread::sleep_for( 1s );
+        testLock.TestPop();
+    }
+}
+
+/**********************************************************************************************************************
+* @brief Thread Main 테스트용 function
+**********************************************************************************************************************/
+void ThreadMain2()
+{
+    while ( true )
+    {
+        int value = testLock.TestRead();
+        cout << value << endl;
+        this_thread::sleep_for( 1ms );
     }
 }
 
@@ -32,9 +78,14 @@ void ThreadMain()
 **********************************************************************************************************************/
 int main()
 {
-    for ( ExInt32 i = 0; i < 5; i++ )
+    for ( ExInt32 i = 0; i < 2; i++ )
     {
         GThreadManager->Lauch( ThreadMain );
+    }
+
+    for ( ExInt32 i = 0; i < 5; i++ )
+    {
+        GThreadManager->Lauch( ThreadMain2 );
     }
 
     GThreadManager->Join();
