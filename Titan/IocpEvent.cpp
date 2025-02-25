@@ -1,39 +1,36 @@
 /**********************************************************************************************************************
-* @file  CoreGlobal.cpp
+* @file  IocpEvent.cpp
 *
-* @brief CoreGlobal 클래스 cpp 파일
+* @brief IocpEvent 클래스 cpp 파일
 *
-* @date  2025.02.16
+* @date  2025.02.23
 **********************************************************************************************************************/
 
 
 #include "pch.h"
-#include "CoreGlobal.h"
-#include "SocketUtil.h"
-#include "ThreadManager.h"
-
-
-/// 쓰레드 관리자 전역 개체
-ThreadManager* GThreadManager = nullptr;
+#include "IocpEvent.h"
 
 
 /**********************************************************************************************************************
 * @brief 생성자
 **********************************************************************************************************************/
-CoreGlobal::CoreGlobal()
+IocpEvent::IocpEvent( EIocpEventType iocpEventType )
+:
+_type( iocpEventType )
 {
-	/// 초기화 순서로 CoreGlobal 에서 전역 개체 관리
-	GThreadManager = new ThreadManager();
-	SocketUtil::Init();
+	Clear();
 }
 
 /**********************************************************************************************************************
-* @brief 소멸자
+* @brief 개체를 초기화 합니다.
 **********************************************************************************************************************/
-CoreGlobal::~CoreGlobal()
+ExVoid IocpEvent::Clear()
 {
-	delete GThreadManager;
-	SocketUtil::Clear();
-}
+	/*OVERLAPPED::hEvent     = 0;
+	OVERLAPPED::Internal     = 0;
+	OVERLAPPED::InternalHigh = 0;
+	OVERLAPPED::Offset       = 0;
+	OVERLAPPED::OffsetHigh   = 0;*/
 
-CoreGlobal GCoreGlobal;
+	::ZeroMemory( this, sizeof( OVERLAPPED ) );
+}

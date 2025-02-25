@@ -20,6 +20,11 @@ using ExInt16  = __int16;
 using ExInt32  = __int32;
 using ExInt64  = __int64;
 
+using ExBool   = bool;
+using ExFloat  = float;
+using ExDouble = double;
+using ExVoid   = void;
+
 using ExMutex = std::mutex;
 
 template<typename T>
@@ -34,5 +39,7 @@ using ExLockGuard = std::lock_guard<T>;
 template<typename T>
 using ExSharedPtr = std::shared_ptr<T>;
 
-
-
+#define size16(val) static_cast<ExInt16>( sizeof( val ) )
+#define size32(val) static_cast<ExInt32>( sizeof( val ) )
+#define len16(arr) static_cast<ExInt16>( sizeof( arr ) / sizeof( arr[ 0 ] ) )
+#define len32(arr) static_cast<ExInt32>( sizeof( arr ) / sizeof( arr[ 0 ] ) )

@@ -16,6 +16,15 @@
     <Filter Include="Definition">
       <UniqueIdentifier>{212214cb-bf3f-448c-bf77-fe74c1a52b66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{62f6eb2d-9b5a-4d8a-9870-2fa7da508e9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\IocpEvent">
+      <UniqueIdentifier>{eabc80a0-1e04-4ecb-bf0c-4e941f5560f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\IocpObject">
+      <UniqueIdentifier>{aaef0765-3f07-4da2-adfd-06a53a65cdb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -66,6 +75,45 @@
     <ClInclude Include="TObjectBase.h">
       <Filter>Definition</Filter>
     </ClInclude>
+    <ClInclude Include="SocketUtil.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="NetAddress.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpCore.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpEvent.h">
+      <Filter>Network\IocpEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpAcceptEvent.h">
+      <Filter>Network\IocpEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpConnectEvent.h">
+      <Filter>Network\IocpEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpRecvEvent.h">
+      <Filter>Network\IocpEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpSendEvent.h">
+      <Filter>Network\IocpEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpObject.h">
+      <Filter>Network\IocpObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Listener.h">
+      <Filter>Network\IocpObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>Network\IocpObject</Filter>
+    </ClInclude>
+    <ClInclude Include="NetUtil.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumTypes.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CorePch.cpp">
@@ -97,6 +145,39 @@
     </ClCompile>
     <ClCompile Include="WriteLockGuard.cpp">
       <Filter>Lock</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketUtil.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="NetAddress.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpCore.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpEvent.cpp">
+      <Filter>Network\IocpEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpAcceptEvent.cpp">
+      <Filter>Network\IocpEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpConnectEvent.cpp">
+      <Filter>Network\IocpEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpRecvEvent.cpp">
+      <Filter>Network\IocpEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpSendEvent.cpp">
+      <Filter>Network\IocpEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="Listener.cpp">
+      <Filter>Network\IocpObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>Network\IocpObject</Filter>
+    </ClCompile>
+    <ClCompile Include="NetUtil.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

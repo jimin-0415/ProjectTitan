@@ -1,77 +1,58 @@
 /**********************************************************************************************************************
-* @file  ThreadManager.cpp
+* @file  NetAddress.cpp
 *
-* @brief ThreadManager 클래스 cpp 파일
+* @brief NetAddress 클래스 cpp 파일
 *
-* @date  2025.02.16
+* @date  2025.02.23
 **********************************************************************************************************************/
 
 
 #include "pch.h"
-#include "ThreadManager.h"
-#include "CoreTLS.h"
-#include "CoreGlobal.h"
+#include "NetAddress.h"
 
 
 /**********************************************************************************************************************
 * @brief 생성자
 **********************************************************************************************************************/
-ThreadManager::ThreadManager()
-{
-	InitTLS();
-}
-
-/**********************************************************************************************************************
-* @brief 소멸자
-**********************************************************************************************************************/
-ThreadManager::~ThreadManager()
+NetAddress::NetAddress( SOCKADDR_IN sockAddr )
+:
+_sockAddr( sockAddr)
 {
 }
 
 /**********************************************************************************************************************
-* @brief 새로운 쓰레드를 생성하고 실행합니다.
+* @brief 생성자
 **********************************************************************************************************************/
-void ThreadManager::Launch(Callback callback)
+NetAddress::NetAddress( wstring ip, ExUInt16 port )
 {
-	ExLockGuard< ExMutex > lockGuard( _lock );
-
-	_threadList.push_back(
-		thread( 
-			[=](){
-					InitTLS();
-					callback();
-					DestroyTLS();
-				 }
-			) );
+	::memset( &_sockAddr, 0, sizeof( _sockAddr ) );
+	_sockAddr.sin_family = AF_INET;
+	_sockAddr.sin_addr   = NetUtil::ConvertTo( ip.c_str() );
+	_sockAddr.sin_port   = ::htons( port );
 }
 
 /**********************************************************************************************************************
-* @brief 모든 스레드를 대기하고 종료를 기다립니다.
+* @brief SOCKADDR를 반한한다.
 **********************************************************************************************************************/
-void ThreadManager::Join()
+SOCKADDR_IN& NetAddress::GetSockAddr()
 {
-	for ( thread& t : _threadList )
-	{
-		if ( t.joinable() )
-			t.join();
-	}
-
-	_threadList.clear();
+	return _sockAddr;
 }
 
 /**********************************************************************************************************************
-* @brief TLS 개체를 초기화합니다.
+* @brief Ip 주소를 반환한다.
 **********************************************************************************************************************/
-void ThreadManager::InitTLS()
+wstring NetAddress::GetIp()
 {
-	static ExAtomic<ExUInt32> sThreadId = 1;
-	LThreadId = sThreadId.fetch_add( 1 );
+	WCHAR buffer[ 100 ];
+	::InetNtopW( AF_INET, &_sockAddr.sin_addr, buffer, len32( buffer ) );
+	return buffer;
 }
 
 /**********************************************************************************************************************
-* @brief TLS 개체를 파괴합니다.
+* @brief Port를 반환한다.
 **********************************************************************************************************************/
-void ThreadManager::DestroyTLS()
+ExUInt16 NetAddress::GetPort()
 {
-	// TLS 해제를 위한 추가 작업이 필요한 경우 구현
+	return ::ntohs( _sockAddr.sin_port );
 }

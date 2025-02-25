@@ -44,7 +44,7 @@ public:
 
 public:
 	/// 새로운 쓰레드를 생성하고 실행합니다.
-	void Lauch( Callback callback );
+	void Launch( Callback callback );
 	
 	/// 모든 스레드를 대기하고 종료를 기다립니다.
 	void Join();

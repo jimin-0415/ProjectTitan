@@ -21,18 +21,27 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <winsock2.h>
+#include <mswsock.h>
+#include <ws2tcpip.h>
 #include <windows.h>
 #include "Types.h"
+#include "EnumTypes.h"
+#include "IocpCore.h"
 #include "TObjectBase.h"
 #include "CoreGlobal.h"
 #include "CoreTLS.h"
 #include "CoreMacro.h"
 #include "Noncopyable.h"
+#include "NetUtil.h"
 #include "LockType.h"
 #include "RWLock.h"
 #include "RWSpinLock.h"
 #include "ReadLockGuard.h"
 #include "WriteLockGuard.h"
+
+
+#pragma comment(lib,"ws2_32.lib")
 
 
 using namespace std;
