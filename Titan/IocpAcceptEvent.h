@@ -25,7 +25,7 @@ class IocpAcceptEvent : public IocpEvent
 {
 private:
 	/// 세션
-	Session* _session = nullptr;
+	SessionPtr _session = nullptr;
 
 public:
 	/// 생성자
@@ -36,8 +36,8 @@ public:
 
 public:
 	/// 세션을 반환합니다.
-	Session* GetSession() { return _session; }
+	const SessionPtr& GetSession() { return _session; }
 
 	/// 세션을 설정합니다.
-	ExVoid SetSession( Session* session ) { _session = session; }
+	ExVoid SetSession( const SessionPtr& session ) { _session = session; }
 };

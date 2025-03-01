@@ -25,6 +25,9 @@
     <Filter Include="Network\IocpObject">
       <UniqueIdentifier>{aaef0765-3f07-4da2-adfd-06a53a65cdb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network\Service">
+      <UniqueIdentifier>{40a02c69-9052-4864-9343-b17233c0c545}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -114,6 +117,15 @@
     <ClInclude Include="EnumTypes.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Service.h">
+      <Filter>Network\Service</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientService.h">
+      <Filter>Network\Service</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerService.h">
+      <Filter>Network\Service</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CorePch.cpp">
@@ -178,6 +190,15 @@
     </ClCompile>
     <ClCompile Include="NetUtil.cpp">
       <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Service.cpp">
+      <Filter>Network\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientService.cpp">
+      <Filter>Network\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerService.cpp">
+      <Filter>Network\Service</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

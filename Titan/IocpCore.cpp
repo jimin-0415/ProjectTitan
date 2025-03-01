@@ -13,10 +13,6 @@
 #include "IocpObject.h"
 
 
-// TEMP
-IocpCore GIocpCore;
-
-
 /**********************************************************************************************************************
 * @brief 생성자
 **********************************************************************************************************************/
@@ -37,10 +33,10 @@ IocpCore::~IocpCore()
 /**********************************************************************************************************************
 * @brief 등록하다
 **********************************************************************************************************************/
-ExBool IocpCore::Register( IocpObject* iocpObject )
+ExBool IocpCore::Register( IocpObjectPtr iocpObject )
 {
 	// 현재는 동시 실행 쓰레드 수에대한 제한 없다.
-	return ::CreateIoCompletionPort( iocpObject->GetHandle(), _iocpHandle, reinterpret_cast<ULONG_PTR>( _iocpHandle ), 0 );
+	return ::CreateIoCompletionPort( iocpObject->GetHandle(), _iocpHandle, 0, 0 );
 }
 
 /**********************************************************************************************************************
@@ -49,16 +45,17 @@ ExBool IocpCore::Register( IocpObject* iocpObject )
 ExBool IocpCore::Dispatch( ExInt32 timeoutMs )
 {
 	DWORD numOfBytes = 0;
-	IocpObject* iocpObject = nullptr;
+	ULONG_PTR key = 0;
 	IocpEvent* iocpEvent = nullptr;
 
 	if ( ::GetQueuedCompletionStatus(
 		_iocpHandle,
 		OUT & numOfBytes,
-		OUT reinterpret_cast<PULONG_PTR>( &iocpObject ),
+		OUT &key,
 		OUT reinterpret_cast<LPOVERLAPPED*>( &iocpEvent ),
 		timeoutMs ) )
 	{
+		IocpObjectPtr iocpObject = iocpEvent->GetOwner();
 		iocpObject->Dispatch( iocpEvent, numOfBytes );
 	}
 	else
@@ -71,6 +68,7 @@ ExBool IocpCore::Dispatch( ExInt32 timeoutMs )
 			} break;
 			default:
 			{
+				IocpObjectPtr iocpObject = iocpEvent->GetOwner();
 				iocpObject->Dispatch( iocpEvent, numOfBytes );
 			} break;
 		}

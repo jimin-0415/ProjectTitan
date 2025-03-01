@@ -15,7 +15,7 @@
 *
 * @brief IocpObject 가상 클래스
 **********************************************************************************************************************/
-class IocpObject
+class IocpObject : public enable_shared_from_this< IocpObject >
 {
 public:
 	/// 핸들러를 반환한다.

@@ -30,12 +30,8 @@ public:
 
 public:
 	/// 등록하다
-	ExBool Register( class IocpObject* iocpObject );
+	ExBool Register( IocpObjectPtr iocpObject );
 
 	/// 처리하다
 	ExBool Dispatch( ExInt32 timeoutMs = INFINITE );
 };
-
-
-// TEMP
-extern IocpCore GIocpCore;

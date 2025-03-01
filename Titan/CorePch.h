@@ -21,6 +21,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <functional>
 #include <winsock2.h>
 #include <mswsock.h>
 #include <ws2tcpip.h>

@@ -23,12 +23,18 @@
 class Listener : public IocpObject
 {
 public:
+	/// IocpAcceptEvent 리스트 타입 정의
 	using IocpAcceptEventList = std::vector< IocpAcceptEvent* >;
 
 private:
+	/// 소켓
 	SOCKET _listener = INVALID_SOCKET;
 
+	/// IocpAcceptEvent 리스트
 	IocpAcceptEventList _iocpAcceptEventList;
+
+	/// 서비스
+	ServerServicePtr _service;
 
 public:
 	/// 생성자
@@ -39,7 +45,7 @@ public:
 
 public:
 	/// 연결 수락을 시작한다
-	ExBool StartAccept( NetAddress netAddress );
+	ExBool StartAccept( ServerServicePtr service );
 
 	/// 소켓을 종료한다.
 	ExVoid CloseSocket();

@@ -27,6 +27,12 @@ using ExVoid   = void;
 
 using ExMutex = std::mutex;
 
+using IocpCorePtr      = std::shared_ptr< class IocpCore >;
+using IocpObjectPtr    = std::shared_ptr< class IocpObject >;
+using ListenerPtr      = std::shared_ptr< class Listener >;
+using SessionPtr       = std::shared_ptr< class Session >;
+using ServerServicePtr = std::shared_ptr< class ServerService >;
+
 template<typename T>
 using ExAtomic = std::atomic<T>;
 

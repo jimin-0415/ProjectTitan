@@ -11,6 +11,7 @@
 #include "Listener.h"
 #include "Session.h"
 #include "SocketUtil.h"
+#include "ServerService.h"
 #include "IocpEvent.h"
 #include "IocpCore.h"
 
@@ -29,11 +30,17 @@ Listener::~Listener()
 /**********************************************************************************************************************
 * @brief 연결 수락을 시작한다
 **********************************************************************************************************************/
-ExBool Listener::StartAccept( NetAddress netAddress )
+ExBool Listener::StartAccept( ServerServicePtr service )
 {
-    _listener = SocketUtil::CreateSocket();
+    _service = service;
+    if ( nullptr == _service )
+        return false;
     
-    if ( GIocpCore.Register( this ) == false )
+    _listener = SocketUtil::CreateSocket();
+    if ( INVALID_SOCKET == _listener )
+        return false;
+
+    if ( service->GetIocpCore()->Register( this->shared_from_this() ) == false )
         return false;
 
     if ( SocketUtil::SetReuseAddress( _listener, true ) == false )
@@ -43,7 +50,7 @@ ExBool Listener::StartAccept( NetAddress netAddress )
         return false;
 
     // net Address binding 
-    if ( SocketUtil::Bind( _listener, netAddress ) == false )
+    if ( SocketUtil::Bind( _listener, service->GetNetAddress() ) == false )
         return false;
 
     if ( SocketUtil::Listen( _listener ) == false )
@@ -53,6 +60,8 @@ ExBool Listener::StartAccept( NetAddress netAddress )
     for ( ExInt32 i = 0; i < acceptCount; i++ )
     {
         IocpAcceptEvent* acceptEvent = new IocpAcceptEvent();
+        acceptEvent->SetOwner( this->shared_from_this() );
+
         _iocpAcceptEventList.push_back( acceptEvent );
         _RegisterAccept( acceptEvent );
     }
@@ -66,7 +75,6 @@ ExBool Listener::StartAccept( NetAddress netAddress )
 ExVoid Listener::CloseSocket()
 {
     SocketUtil::Close( _listener );
-    return ExVoid();
 }
 
 /**********************************************************************************************************************
@@ -74,7 +82,7 @@ ExVoid Listener::CloseSocket()
 **********************************************************************************************************************/
 HANDLE Listener::GetHandle()
 {
-    return HANDLE();
+    return reinterpret_cast<HANDLE>( _listener );
 }
 
 /**********************************************************************************************************************
@@ -98,8 +106,10 @@ void Listener::Dispatch( IocpEvent* iocpEvent, ExInt32 numOfBytes )
 ExVoid Listener::_RegisterAccept( IocpAcceptEvent* acceptEvent )
 {
     // Accept 예약한다.
-    Session* session = new Session();
-    
+    // Register IOCP
+    SessionPtr session = _service->CreateSession(); 
+    acceptEvent->SetSession( session );
+
     DWORD bytesReceived = 0;
     ExBool result = SocketUtil::AcceptEx( 
         _listener, 
@@ -119,9 +129,6 @@ ExVoid Listener::_RegisterAccept( IocpAcceptEvent* acceptEvent )
             _RegisterAccept( acceptEvent );
         }
     }
-
-    
-    return ExVoid();
 }
 
 /**********************************************************************************************************************
@@ -131,7 +138,7 @@ ExVoid Listener::_ProcessAccept( IocpAcceptEvent* acceptEvent )
 {
     do
     {
-        Session* session = acceptEvent->GetSession();
+        SessionPtr session = acceptEvent->GetSession();
         ExBool result = SocketUtil::SetUpdateAcceptSocket( session->GetSocket(), _listener );
         if ( false == result )
             break;
