@@ -88,11 +88,14 @@ public:
 
 public:
     /// 네트워크 주소를 반환한다.
-    const NetAddress& GetNetAddress() { return _netAddress; }
+    const NetAddress& GetNetAddress() const { return _netAddress; }
 
     /// IocpCore를 반환한다.
     const IocpCorePtr& GetIocpCore() { return _iocpCore; }
     
+    /// 서비스 타입을 반환한다
+    EServiceType GetServiceType() { return _type; }
+
     /// 세션 개수를 반환한다.
     ExInt32 GetSessionCount() { return _sessionCount; }
 

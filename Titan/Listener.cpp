@@ -40,7 +40,7 @@ ExBool Listener::StartAccept( ServerServicePtr service )
     if ( INVALID_SOCKET == _listener )
         return false;
 
-    if ( service->GetIocpCore()->Register( this->shared_from_this() ) == false )
+    if ( service->GetIocpCore()->Register( shared_from_this() ) == false )
         return false;
 
     if ( SocketUtil::SetReuseAddress( _listener, true ) == false )
@@ -152,6 +152,7 @@ ExVoid Listener::_ProcessAccept( IocpAcceptEvent* acceptEvent )
             break;
 
         session->SetNetAddress( NetAddress( sockAddress ) );
+        session->_ProcessConnect();
         cout << "Client Connected!" << endl;
 
     } while ( false );

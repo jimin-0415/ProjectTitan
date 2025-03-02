@@ -26,4 +26,5 @@ public:
 
 	/// 소멸자
 	~IocpRecvEvent() = default;
+
 };

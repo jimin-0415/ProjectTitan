@@ -60,6 +60,7 @@ ExVoid Service::CloseService()
 SessionPtr Service::CreateSession()
 {
     SessionPtr session = _sessionFactory();
+    session->SetService( shared_from_this() );
 
     if ( _iocpCore->Register( session ) == false )
         return nullptr;
@@ -83,6 +84,6 @@ ExVoid Service::AddSession( SessionPtr session )
 ExVoid Service::ReleaseSession( SessionPtr session )
 {
     WRITE_LOCK;
-    ASSERT_CRASH( _sessions.erase( session ) != 0 );
     _sessionCount--;
+    ASSERT_CRASH( _sessions.erase( session ) != 0 );
 }

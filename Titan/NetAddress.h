@@ -33,7 +33,7 @@ public:
 
 public:
 	/// SOCKADDR를 반한한다.
-	SOCKADDR_IN& GetSockAddr();
+	const SOCKADDR_IN& GetSockAddr() const;
 	
 	/// Ip 주소를 반환한다.
 	wstring GetIp();

@@ -26,4 +26,8 @@ public:
 
 	/// 소멸자
 	~IocpSendEvent() = default;
+
+public:
+	/// TEMP SendBuffer
+	std::vector<BYTE> Buffer;
 };

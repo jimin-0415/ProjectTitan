@@ -27,12 +27,6 @@ using ExVoid   = void;
 
 using ExMutex = std::mutex;
 
-using IocpCorePtr      = std::shared_ptr< class IocpCore >;
-using IocpObjectPtr    = std::shared_ptr< class IocpObject >;
-using ListenerPtr      = std::shared_ptr< class Listener >;
-using SessionPtr       = std::shared_ptr< class Session >;
-using ServerServicePtr = std::shared_ptr< class ServerService >;
-
 template<typename T>
 using ExAtomic = std::atomic<T>;
 
@@ -44,6 +38,18 @@ using ExLockGuard = std::lock_guard<T>;
 
 template<typename T>
 using ExSharedPtr = std::shared_ptr<T>;
+
+template< typename T >
+using ExWeakPtr = std::weak_ptr< T >;
+
+
+using IocpCorePtr      = ExSharedPtr< class IocpCore      >;
+using IocpObjectPtr    = ExSharedPtr< class IocpObject    >;
+using ListenerPtr      = ExSharedPtr< class Listener      >;
+using SessionPtr       = ExSharedPtr< class Session       >;
+using ServerServicePtr = ExSharedPtr< class ServerService >;
+using ClientServicePtr = ExSharedPtr< class ClientService >;
+
 
 #define size16(val) static_cast<ExInt16>( sizeof( val ) )
 #define size32(val) static_cast<ExInt32>( sizeof( val ) )

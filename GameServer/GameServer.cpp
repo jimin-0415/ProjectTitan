@@ -23,7 +23,19 @@ std::shared_ptr< T > SessionFactory()
 
 class GameSession : public Session
 {
+public:
+    virtual ExInt32 OnReceived( BYTE* buffer, ExInt32 len ) override final
+    {
+        cout << "OnRecv Len = " << len << endl;
+        Send( buffer, len );
+        return len;
+    }
 
+    /// 데이터가 송신되었을 때 처리한다
+    virtual ExVoid OnSent( ExInt32 len ) override final
+    {
+        cout << "OnSend Len = " << len << endl;
+    }
 };
 
 /**********************************************************************************************************************

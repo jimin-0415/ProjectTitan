@@ -9,6 +9,7 @@
 
 #include "pch.h"
 #include "ClientService.h"
+#include "Session.h"
 
 
 /**********************************************************************************************************************
@@ -36,5 +37,16 @@ ClientService::~ClientService()
 **********************************************************************************************************************/
 ExBool ClientService::Start()
 {
+    if ( false == CanStart() )
+        return false;
+
+    const ExInt32 sessionCount = GetMaxSessionCount();
+    for ( ExInt32 i = 0; i < sessionCount; i++ )
+    {
+        SessionPtr session = CreateSession();
+        if ( false == session->Connect() )
+            return false;
+    }
+
     return true;
 }

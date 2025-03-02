@@ -1,37 +1,21 @@
 /**********************************************************************************************************************
-* @file  IocpCore.h
+* @file  IocpDisconnectEvent.cpp
 *
-* @brief IocpCore 클래스 h 파일
+* @brief IocpDisconnectEvent 클래스 cpp 파일
 *
-* @date  2025.02.23
+* @date  2025.03.02
 **********************************************************************************************************************/
 
 
-#pragma once
+#include "pch.h"
+#include "IocpDisconnectEvent.h"
 
 
 /**********************************************************************************************************************
-* @class IocpCore
-*
-* @brief IocpCore 클래스
+* @brief 생성자
 **********************************************************************************************************************/
-class IocpCore
+IocpDisconnectEvent::IocpDisconnectEvent()
+:
+IocpEvent( EIocpEventType::Disconnect )
 {
-private:
-	/// 핸들러 
-	HANDLE _iocpHandle;
-
-public:
-	/// 생성자
-	IocpCore();
-
-	/// 소멸자
-	~IocpCore();
-
-public:
-	/// 등록하다
-	ExBool Register( IocpObjectPtr iocpObject );
-	
-	/// 처리하다
-	ExBool Dispatch( ExInt32 timeoutMs = INFINITE );
-};
+}

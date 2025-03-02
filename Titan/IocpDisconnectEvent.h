@@ -1,37 +1,30 @@
 /**********************************************************************************************************************
-* @file  IocpCore.h
+* @file  IocpDisconnectEvent.h
 *
-* @brief IocpCore 클래스 h 파일
+* @brief IocpDisconnectEvent 클래스 h 파일
 *
-* @date  2025.02.23
+* @date  2025.03.02
 **********************************************************************************************************************/
 
 
 #pragma once
 
 
+#include "IocpEvent.h"
+
+
 /**********************************************************************************************************************
-* @class IocpCore
+* @class IocpDisconnectEvent
 *
-* @brief IocpCore 클래스
+* @brief IocpDisconnectEvent 처리 클래스
 **********************************************************************************************************************/
-class IocpCore
+class IocpDisconnectEvent : public IocpEvent
 {
-private:
-	/// 핸들러 
-	HANDLE _iocpHandle;
-
 public:
-	/// 생성자
-	IocpCore();
+    /// 생성자
+    IocpDisconnectEvent();
 
-	/// 소멸자
-	~IocpCore();
-
-public:
-	/// 등록하다
-	ExBool Register( IocpObjectPtr iocpObject );
-	
-	/// 처리하다
-	ExBool Dispatch( ExInt32 timeoutMs = INFINITE );
+    /// 소멸자
+    ~IocpDisconnectEvent() = default;
 };
+

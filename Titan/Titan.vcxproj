@@ -169,6 +169,7 @@
     <ClInclude Include="IocpAcceptEvent.h" />
     <ClInclude Include="IocpConnectEvent.h" />
     <ClInclude Include="IocpCore.h" />
+    <ClInclude Include="IocpDisconnectEvent.h" />
     <ClInclude Include="IocpEvent.h" />
     <ClInclude Include="IocpObject.h" />
     <ClInclude Include="IocpRecvEvent.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="IocpAcceptEvent.cpp" />
     <ClCompile Include="IocpConnectEvent.cpp" />
     <ClCompile Include="IocpCore.cpp" />
+    <ClCompile Include="IocpDisconnectEvent.cpp" />
     <ClCompile Include="IocpEvent.cpp" />
     <ClCompile Include="IocpRecvEvent.cpp" />
     <ClCompile Include="IocpSendEvent.cpp" />

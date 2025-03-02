@@ -34,7 +34,7 @@ NetAddress::NetAddress( wstring ip, ExUInt16 port )
 /**********************************************************************************************************************
 * @brief SOCKADDR를 반한한다.
 **********************************************************************************************************************/
-SOCKADDR_IN& NetAddress::GetSockAddr()
+const SOCKADDR_IN& NetAddress::GetSockAddr() const
 {
 	return _sockAddr;
 }

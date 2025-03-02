@@ -21,9 +21,9 @@
 class IocpConnectEvent : public IocpEvent
 {
 public:
-	/// 생성자
-	IocpConnectEvent();
+    /// 생성자
+    IocpConnectEvent();
 
-	/// 소멸자
-	~IocpConnectEvent() = default;
+    /// 소멸자
+    ~IocpConnectEvent() = default;
 };

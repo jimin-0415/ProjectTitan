@@ -126,6 +126,9 @@
     <ClInclude Include="ServerService.h">
       <Filter>Network\Service</Filter>
     </ClInclude>
+    <ClInclude Include="IocpDisconnectEvent.h">
+      <Filter>Network\IocpEvent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CorePch.cpp">
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="ServerService.cpp">
       <Filter>Network\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpDisconnectEvent.cpp">
+      <Filter>Network\IocpEvent</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
