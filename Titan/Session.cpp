@@ -11,13 +11,20 @@
 #include "Session.h"
 #include "Service.h"
 #include "SocketUtil.h"
+#include "SendBuffer.h"
 #include "NetAddress.h"
+
+
+/// 버퍼 사이즈
+const static ExInt32 s_bufferSize = 0x10000; // 64kb
 
 
 /**********************************************************************************************************************
 * @brief 생성자
 **********************************************************************************************************************/
 Session::Session()
+:
+_recvBuffer( s_bufferSize )
 {
     _socket = SocketUtil::CreateSocket();
 }
@@ -33,20 +40,14 @@ Session::~Session()
 /**********************************************************************************************************************
 * @brief 송신 한다
 **********************************************************************************************************************/
-ExVoid Session::Send( BYTE* buffer, ExInt32 len )
+ExVoid Session::Send( const SendBufferPtr& sendBuffer )
 {
-    // 생각할 문제.
-    // 1. 버퍼를 어떻게 할지.
-    // 2. SendEvent 관리? 단일 or 여러개? WSASend 중첩??
-
-    // Temp
-    IocpSendEvent* sendEvent = new IocpSendEvent();
-    sendEvent->SetOwner( shared_from_this() );
-    sendEvent->Buffer.resize( len );
-    ::memcpy( sendEvent->Buffer.data(), buffer, len );
-
     WRITE_LOCK;
-    _RegisterSend( sendEvent );
+
+    _sendQueu.push( sendBuffer );
+
+    if ( _sendRegistered.exchange( true ) == false )
+        _RegisterSend();
 }
 
 /**********************************************************************************************************************
@@ -108,7 +109,7 @@ void Session::Dispatch( IocpEvent* iocpEvent, ExInt32 numOfBytes )
         _ProcessRecv( numOfBytes );
         break;
     case EIocpEventType::Send:
-        _ProcessSend( static_cast<IocpSendEvent*>( iocpEvent ), numOfBytes );
+        _ProcessSend( numOfBytes );
         break;
     }
 }
@@ -201,7 +202,7 @@ ExBool Session::_RegisterDisconnect()
     if ( false == SocketUtil::DisconnectEx( _socket, &_disconnectEvent, TF_REUSE_SOCKET, 0 ) )
     {
         ExInt32 errorCode = ::WSAGetLastError();
-        if ( errorCode == WSA_IO_PENDING )
+        if ( errorCode != WSA_IO_PENDING )
         {
             _disconnectEvent.SetOwner( nullptr );
             return false;
@@ -223,8 +224,8 @@ ExVoid Session::_RegisterRecv()
     _recvEvent.SetOwner( shared_from_this() );
 
     WSABUF wsaBuf;
-    wsaBuf.buf = reinterpret_cast<char*>( _recvBuffer );
-    wsaBuf.len = len32( _recvBuffer );
+    wsaBuf.buf = reinterpret_cast<char*>( _recvBuffer.GetWriteBuffer() );
+    wsaBuf.len = _recvBuffer.FreeSize();
 
     DWORD numOfBytes = 0;
     DWORD flags = 0;
@@ -243,28 +244,53 @@ ExVoid Session::_RegisterRecv()
 /**********************************************************************************************************************
 * @brief 송신을 등록한다
 **********************************************************************************************************************/
-ExVoid Session::_RegisterSend( IocpSendEvent* sendEvent )
+ExVoid Session::_RegisterSend(  )
 {
     if ( false == _connected )
         return;
 
-    WSABUF wsaBuf;
-    wsaBuf.buf = (char*) sendEvent->Buffer.data();
-    wsaBuf.len = (ULONG) sendEvent->Buffer.size();
+    _sendEvent.Clear();
+    _sendEvent.SetOwner( shared_from_this() );
+
+    {
+        WRITE_LOCK;
+        ExInt32 writeSize = 0;
+        while ( false == _sendQueu.empty() )
+        {
+            SendBufferPtr sendBuffer = _sendQueu.front();
+            
+            writeSize += sendBuffer->GetWriteSize();
+            // TODO : 예외처리
+
+            _sendQueu.pop();
+            _sendEvent.AddBuffer( sendBuffer );
+        }
+    }
+
+    // Sactter-Gather ( 흩어진 데이터를 한번에 모아서 보낸다.)
+    std::vector<WSABUF> wsaBufs;
+    wsaBufs.reserve( _sendEvent.GetSendBufferVector().size() );
+    for ( const auto& sendBuffer : _sendEvent.GetSendBufferVector() )
+    {
+        WSABUF wsaBuf;
+        wsaBuf.buf = reinterpret_cast<char*>( sendBuffer->GetBuffer()    );
+        wsaBuf.len = static_cast<ULONG>     ( sendBuffer->GetWriteSize() );
+        wsaBufs.push_back( wsaBuf );
+    }
 
     DWORD numOfBytes = 0;
-    if ( SOCKET_ERROR == ::WSASend( _socket, &wsaBuf, 1, OUT & numOfBytes, 0, sendEvent, nullptr ) )
+    if ( SOCKET_ERROR == 
+         ::WSASend( _socket, wsaBufs.data(), static_cast<DWORD>( wsaBufs.size() ), OUT & numOfBytes, 0, &_sendEvent, nullptr ) )
     {
         ExInt32 errorCode = ::WSAGetLastError();
         if ( errorCode != WSA_IO_PENDING )
         {
             _HandleError( errorCode );
-            _recvEvent.SetOwner( nullptr );
-            delete sendEvent;
+            _sendEvent.SetOwner( nullptr );
+            _sendEvent.ClearBuffer();
+            _sendRegistered.store( false );
         }
     }
-
-    return ExVoid();
 }
 
 /**********************************************************************************************************************
@@ -306,8 +332,26 @@ ExVoid Session::_ProcessRecv( ExInt32 numOfBytes )
         return;
     }
 
-    OnReceived( _recvBuffer, numOfBytes );
+    if ( false == _recvBuffer.OnWrite( numOfBytes ) )
+    {
+        Disconnect( L"OnWrite Overflow!!!" );
+        return;
+    }
+
+    // 수신사이즈.
+    ExInt32 dataSize = _recvBuffer.DataSize();
     
+    // 처리된 개수.
+    ExInt32 processLen = OnReceived( _recvBuffer.GetReadBuffer(), dataSize );
+    
+    if ( processLen < 0 || dataSize < processLen || _recvBuffer.OnRead( processLen ) == false )
+    {
+        Disconnect( L" OnRead OverFlow!! " );
+        return;
+    }
+
+    _recvBuffer.ShiftBuffer();
+
     // 수신 등록
     _RegisterRecv();
 }
@@ -315,10 +359,10 @@ ExVoid Session::_ProcessRecv( ExInt32 numOfBytes )
 /**********************************************************************************************************************
 * @brief 송신을 수행한다
 **********************************************************************************************************************/
-ExVoid Session::_ProcessSend( IocpSendEvent* sendEvent, ExInt32 numOfBytes )
+ExVoid Session::_ProcessSend( ExInt32 numOfBytes )
 {
-    sendEvent->SetOwner( nullptr );
-    delete sendEvent;
+    _sendEvent.SetOwner( nullptr );
+    _sendEvent.ClearBuffer();
 
     if ( 0 == numOfBytes )
     {
@@ -327,6 +371,15 @@ ExVoid Session::_ProcessSend( IocpSendEvent* sendEvent, ExInt32 numOfBytes )
     }
 
     OnSent( numOfBytes );
+
+    {
+        WRITE_LOCK;
+
+        if ( _sendQueu.empty() )
+            _sendRegistered.store( false );
+        else
+            _RegisterSend();
+    }
 }
 
 /**********************************************************************************************************************
@@ -342,7 +395,7 @@ ExVoid Session::_HandleError( ExInt32 errorCode )
         break;
     default:
         // TODO : LOG
-        cout << "Handle Erro :" << errorCode << endl;
+        cout << "Handle Error :" << errorCode << endl;
         break;
     }
 }

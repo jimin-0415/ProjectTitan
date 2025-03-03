@@ -43,12 +43,14 @@ template< typename T >
 using ExWeakPtr = std::weak_ptr< T >;
 
 
-using IocpCorePtr      = ExSharedPtr< class IocpCore      >;
-using IocpObjectPtr    = ExSharedPtr< class IocpObject    >;
-using ListenerPtr      = ExSharedPtr< class Listener      >;
-using SessionPtr       = ExSharedPtr< class Session       >;
-using ServerServicePtr = ExSharedPtr< class ServerService >;
-using ClientServicePtr = ExSharedPtr< class ClientService >;
+using IocpCorePtr        = ExSharedPtr< class IocpCore        >;
+using IocpObjectPtr      = ExSharedPtr< class IocpObject      >;
+using ListenerPtr        = ExSharedPtr< class Listener        >;
+using SessionPtr         = ExSharedPtr< class Session         >;
+using ServerServicePtr   = ExSharedPtr< class ServerService   >;
+using ClientServicePtr   = ExSharedPtr< class ClientService   >;
+using SendBufferPtr      = ExSharedPtr< class SendBuffer      >;
+using SendBufferChunkPtr = ExSharedPtr< class SendBufferChunk >;
 
 
 #define size16(val) static_cast<ExInt16>( sizeof( val ) )

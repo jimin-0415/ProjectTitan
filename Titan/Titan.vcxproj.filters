@@ -129,6 +129,18 @@
     <ClInclude Include="IocpDisconnectEvent.h">
       <Filter>Network\IocpEvent</Filter>
     </ClInclude>
+    <ClInclude Include="RecvBuffer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SendBuffer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SendBufferChunk.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SendBufferManager.h">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CorePch.cpp">
@@ -205,6 +217,18 @@
     </ClCompile>
     <ClCompile Include="IocpDisconnectEvent.cpp">
       <Filter>Network\IocpEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="RecvBuffer.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SendBuffer.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SendBufferChunk.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SendBufferManager.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

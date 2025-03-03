@@ -13,6 +13,9 @@
 /// 쓰레드 관리자 전역 개체
 extern class ThreadManager* GThreadManager;
 
+/// 송신 버퍼 관리자 전역 개체
+extern class SendBufferManager* GSendBufferManager;
+
 
 /**********************************************************************************************************************
 * @class CoreGlobal
@@ -29,4 +32,5 @@ public:
 	~CoreGlobal();
 };
 
+/// CoreGlobal 전역 개체
 extern CoreGlobal GCoreGlobal;

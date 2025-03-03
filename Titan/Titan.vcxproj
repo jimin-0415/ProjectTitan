@@ -178,11 +178,15 @@
     <ClInclude Include="NetAddress.h" />
     <ClInclude Include="NetUtil.h" />
     <ClInclude Include="ReadLockGuard.h" />
+    <ClInclude Include="RecvBuffer.h" />
     <ClInclude Include="RWSpinLock.h" />
     <ClInclude Include="LockType.h" />
     <ClInclude Include="Noncopyable.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RWLock.h" />
+    <ClInclude Include="SendBuffer.h" />
+    <ClInclude Include="SendBufferChunk.h" />
+    <ClInclude Include="SendBufferManager.h" />
     <ClInclude Include="ServerService.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="Session.h" />
@@ -209,6 +213,7 @@
     <ClCompile Include="NetAddress.cpp" />
     <ClCompile Include="NetUtil.cpp" />
     <ClCompile Include="ReadLockGuard.cpp" />
+    <ClCompile Include="RecvBuffer.cpp" />
     <ClCompile Include="RWSpinLock.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -217,6 +222,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RWLock.cpp" />
+    <ClCompile Include="SendBuffer.cpp" />
+    <ClCompile Include="SendBufferChunk.cpp" />
+    <ClCompile Include="SendBufferManager.cpp" />
     <ClCompile Include="ServerService.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="Session.cpp" />

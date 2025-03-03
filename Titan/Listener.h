@@ -65,4 +65,3 @@ private:
 	/// 연결 수락 처리를 수행한다.
 	ExVoid _ProcessAccept( IocpAcceptEvent* acceptEvent );
 };
-

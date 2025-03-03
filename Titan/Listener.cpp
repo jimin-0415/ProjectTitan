@@ -9,6 +9,7 @@
 
 #include "pch.h"
 #include "Listener.h"
+#include "RecvBuffer.h"
 #include "Session.h"
 #include "SocketUtil.h"
 #include "ServerService.h"
@@ -114,7 +115,7 @@ ExVoid Listener::_RegisterAccept( IocpAcceptEvent* acceptEvent )
     ExBool result = SocketUtil::AcceptEx( 
         _listener, 
         session->GetSocket(), 
-        session->GetRecvBuffer(), 
+        session->GetRecvBuffer().GetWriteBuffer(),
         0, 
         sizeof( SOCKADDR_IN ) + 16, 
         sizeof( SOCKADDR_IN ) + 16, 

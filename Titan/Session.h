@@ -17,6 +17,7 @@
 #include "IocpSendEvent.h"
 #include "IocpRecvEvent.h"
 #include "NetAddress.h"
+#include "RecvBuffer.h"
 
 
 class Service;
@@ -46,24 +47,29 @@ private:
     /// 커넥션 여부
     ExAtomic< ExBool > _connected = false;
 
-    /// 수신 버퍼 (임시)
-    BYTE _recvBuffer[ 1000 ] = {};
-
-    char _sendBuffer[ 1000 ] = {};
-
-    ExInt32 _sendLen = 0;
-
 private:
     USE_LOCK;
-    
+   
+    /// 수신 버퍼
+    RecvBuffer _recvBuffer;
+
+    /// 송신 버퍼 큐
+    std::queue< SendBufferPtr > _sendQueu;
+
+    /// Send 등록 여부
+    ExAtomic< ExBool > _sendRegistered = false;
+
     /// ConnectEvent
     IocpConnectEvent _connectEvent;
 
     /// DisconnectEvent
     IocpDisconnectEvent _disconnectEvent;
 
-    /// IocpEvent
+    /// RecvEvent
     IocpRecvEvent _recvEvent;
+
+    /// SendEvent
+    IocpSendEvent _sendEvent;
     
 public:
     /// 생성자
@@ -74,7 +80,7 @@ public:
 
 public:
     /// 송신 한다
-    ExVoid Send( BYTE* buffer, ExInt32 len );
+    ExVoid Send( const SendBufferPtr& sendBuffer );
 
     /// 연결 한다
     ExBool Connect();
@@ -103,7 +109,7 @@ public:
     NetAddress GetAddress() { return _netAddress; }
 
     /// 수신 버퍼를 반환한다
-    BYTE* GetRecvBuffer() { return _recvBuffer; }
+    RecvBuffer& GetRecvBuffer() { return _recvBuffer; }
 
     /// 세션을 반환한다
     SessionPtr GetSessionPtr() { return static_pointer_cast<Session>( shared_from_this() ); }
@@ -138,7 +144,7 @@ private:
     ExVoid _RegisterRecv();
 
     /// 송신을 등록한다
-    ExVoid _RegisterSend( IocpSendEvent* sendEvent );
+    ExVoid _RegisterSend();
 
     /// 연결을 수행한다
     ExVoid _ProcessConnect();
@@ -150,7 +156,7 @@ private:
     ExVoid _ProcessRecv( ExInt32 numOfBytes );
     
     /// 송신을 수행한다
-    ExVoid _ProcessSend( IocpSendEvent* sendEvent, ExInt32 numOfBytes );
+    ExVoid _ProcessSend( ExInt32 numOfBytes );
 
     /// 핸들 에러를 처리한다
     ExVoid _HandleError( ExInt32 errorCode );

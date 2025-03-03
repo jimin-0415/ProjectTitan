@@ -1,37 +1,45 @@
 /**********************************************************************************************************************
-* @file  IocpSendEvent.cpp
+* @file  GameSessionMaanger.cpp
 *
-* @brief IocpSendEvent 클래스 cpp 파일
+* @brief GameSessionMaanger 클래스 cpp 파일
 *
-* @date  2025.02.23
+* @date  2025.03.03
 **********************************************************************************************************************/
 
 
 #include "pch.h"
-#include "IocpSendEvent.h"
+#include "GameSessionMaanger.h"
+#include "GameSession.h"
+
+
+/// 게임 세션 관리자
+GameSessionMaanger GSessionManager;
 
 
 /**********************************************************************************************************************
-* @brief 생성자
+* @brief 추가한다
 **********************************************************************************************************************/
-IocpSendEvent::IocpSendEvent()
-:
-IocpEvent( EIocpEventType::Send )
+ExVoid GameSessionMaanger::Add( GameSessionPtr session )
 {
+    WRITE_LOCK;
+    _sessionSet.insert( session );
 }
 
 /**********************************************************************************************************************
-* @brief 송신 버퍼에 추가한다
+* @brief 제거한다
 **********************************************************************************************************************/
-ExVoid IocpSendEvent::AddBuffer( const SendBufferPtr& sendBuffer )
+ExVoid GameSessionMaanger::Remove( GameSessionPtr session )
 {
-    _sendBufferVector.push_back( sendBuffer );
+    WRITE_LOCK;
+    _sessionSet.erase( session );
 }
 
 /**********************************************************************************************************************
-* @brief 버퍼를 초기화한다
+* @brief 브로드캐스트 한다
 **********************************************************************************************************************/
-ExVoid IocpSendEvent::ClearBuffer()
+ExVoid GameSessionMaanger::Broadcast( SendBufferPtr sendBuffer )
 {
-    _sendBufferVector.clear();
+    WRITE_LOCK;
+    for ( const GameSessionPtr& session : _sessionSet )
+        session->Send( sendBuffer );
 }

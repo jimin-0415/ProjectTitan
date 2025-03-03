@@ -10,10 +10,12 @@
 #include "pch.h"
 #include "ClientService.h"
 #include "Session.h"
+#include "SendBuffer.h"
+#include "SendBufferManager.h"
 #include "ThreadManager.h"
 
 
-char sendBuffer[] = "Hello World!";
+char sendData[] = "Hello World!";
 
 
 template< typename T >
@@ -34,7 +36,12 @@ public:
     virtual void OnConnected() override final
     {
         cout << "Connected To Server " << endl;
-        Send( (BYTE*) sendBuffer, sizeof( sendBuffer ) );
+
+        SendBufferPtr sendBuffer = GSendBufferManager->Open( 4096 );
+        ::memcpy( sendBuffer->GetBuffer(), sendData, sizeof( sendData ) );
+        sendBuffer->Close( sizeof( sendData ) );
+
+        Send( sendBuffer );
     }
 
     virtual void OnDisconnected() override final
@@ -44,18 +51,22 @@ public:
 
     virtual ExInt32 OnReceived( BYTE* buffer, ExInt32 len ) override final
     {
-        cout << "OnRecv Len = " << len << endl;
+        cout << "(더미)OnRecv Len = " << len << endl;
 
         this_thread::sleep_for( 1s );
 
-        Send( (BYTE*) sendBuffer, sizeof( sendBuffer ) );
+        SendBufferPtr sendBuffer = GSendBufferManager->Open( 4096 );
+        ::memcpy( sendBuffer->GetBuffer(), sendData, sizeof( sendData ) );
+        sendBuffer->Close( sizeof( sendData ) );
+
+        Send( sendBuffer );
+
         return len;
     }
 
-    /// 데이터가 송신되었을 때 처리한다
     virtual ExVoid OnSent( ExInt32 len ) override final
     {
-        cout << "OnSend Len = " << len << endl;
+        cout << "(더미)OnSend Len = " << len << endl;
     }
 };
 
@@ -71,13 +82,13 @@ void HandleError( const char* cause )
 **********************************************************************************************************************/
 int main()
 {
-    this_thread::sleep_for( 5s );
+    this_thread::sleep_for( 1s );
 
     ClientServicePtr service = std::make_shared<ClientService>(
         NetAddress( L"127.0.0.1", 7777 ),
         std::make_shared<IocpCore>(),
         SessionFactory< GameServerSession >, // TODO : SessionManager 등
-        1 );
+        6 );
 
     ASSERT_CRASH( service->Start() );
 

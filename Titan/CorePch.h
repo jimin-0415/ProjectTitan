@@ -11,6 +11,7 @@
 
 
 #include <atomic>
+#include <array>
 #include <iostream>
 #include <list>
 #include <map>
