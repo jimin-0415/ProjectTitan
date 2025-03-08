@@ -141,6 +141,9 @@
     <ClInclude Include="SendBufferManager.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="PacketSession.h">
+      <Filter>Network\IocpObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CorePch.cpp">
@@ -229,6 +232,9 @@
     </ClCompile>
     <ClCompile Include="SendBufferManager.cpp">
       <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketSession.cpp">
+      <Filter>Network\IocpObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

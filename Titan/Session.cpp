@@ -42,11 +42,20 @@ Session::~Session()
 **********************************************************************************************************************/
 ExVoid Session::Send( const SendBufferPtr& sendBuffer )
 {
-    WRITE_LOCK;
+    if ( false == IsConnected() )
+        return;
 
-    _sendQueu.push( sendBuffer );
+    ExBool registerSend = false;
 
-    if ( _sendRegistered.exchange( true ) == false )
+    {
+        WRITE_LOCK;
+        _sendQueu.push( sendBuffer );
+
+        if ( _sendRegistered.exchange( true ) == false )
+            registerSend = true;
+    }
+   
+    if( registerSend )
         _RegisterSend();
 }
 
@@ -70,10 +79,6 @@ ExVoid Session::Disconnect( const WCHAR* cause )
         return;
 
     wcout << "Disconnect:" << cause << endl;
-
-    OnDisconnected();
-    if ( auto service = GetService() )
-        service->ReleaseSession( GetSessionPtr() );
 
     _RegisterDisconnect();
 }
@@ -317,6 +322,11 @@ ExVoid Session::_ProcessConnect()
 ExVoid Session::_ProcessDisconnect()
 {
     _disconnectEvent.SetOwner( nullptr );
+
+    OnDisconnected();
+
+    if ( auto service = GetService() )
+        service->ReleaseSession( GetSessionPtr() );
 }
 
 /**********************************************************************************************************************

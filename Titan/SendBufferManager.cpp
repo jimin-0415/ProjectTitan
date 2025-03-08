@@ -53,6 +53,7 @@ SendBufferChunkPtr SendBufferManager::Pop()
 {
     {
         WRITE_LOCK;
+        cout << "pop Chunk!!" << endl;
         if ( _sendBufferChunkList.empty() == false )
         {
             SendBufferChunkPtr sendBufferChunk = _sendBufferChunkList.back();
@@ -61,6 +62,7 @@ SendBufferChunkPtr SendBufferManager::Pop()
         }
     }
 
+    cout << "create Chunk!!" << endl;
     return SendBufferChunkPtr( new SendBufferChunk(), PushGlobal );
 }
 
@@ -69,6 +71,8 @@ SendBufferChunkPtr SendBufferManager::Pop()
 **********************************************************************************************************************/
 ExVoid SendBufferManager::PushGlobal( SendBufferChunk* buffer )
 {
+    cout << "push Chunk!!" << endl;
+
     // buffer 재사용
     GSendBufferManager->Push( shared_ptr<SendBufferChunk>( buffer, PushGlobal ) );
 }

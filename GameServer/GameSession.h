@@ -10,7 +10,7 @@
 #pragma once
 
 
-#include "Session.h"
+#include "PacketSession.h"
 
 
 /**********************************************************************************************************************
@@ -18,7 +18,7 @@
 *
 * @brief GameSession 클래스
 **********************************************************************************************************************/
-class GameSession : public Session
+class GameSession : public PacketSession
 {
 public:
     /// 생성자
@@ -38,5 +38,5 @@ public:
     virtual ExVoid OnSent( ExInt32 len ) override final;
 
     /// 데이터가 수신되었을 때 처리한다
-    virtual ExInt32 OnReceived( BYTE* buffer, ExInt32 len ) override final;
+    virtual ExInt32 OnReceivedPacket( BYTE* buffer, ExInt32 len ) override final;
 };

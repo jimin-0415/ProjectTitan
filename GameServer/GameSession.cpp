@@ -57,11 +57,11 @@ ExVoid GameSession::OnSent( ExInt32 len )
 /**********************************************************************************************************************
 * @brief 데이터가 수신되었을 때 처리한다
 **********************************************************************************************************************/
-ExInt32 GameSession::OnReceived( BYTE* buffer, ExInt32 len )
+ExInt32 GameSession::OnReceivedPacket( BYTE* buffer, ExInt32 len )
 {
-    // Echo Server
-    cout << "Server OnRecv Len = " << len << endl;
-    
+    PacketHeader header = *( reinterpret_cast<PacketHeader*>( buffer ) );
+    cout << "PakcetId:" << header.id << "Size : " << header.size << endl;
+
     SendBufferPtr sendBuffer = GSendBufferManager->Open( 4096 );
     ::memcpy( sendBuffer->GetBuffer(), buffer, len );
     sendBuffer->Close( len );

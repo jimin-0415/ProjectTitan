@@ -47,6 +47,7 @@ using IocpCorePtr        = ExSharedPtr< class IocpCore        >;
 using IocpObjectPtr      = ExSharedPtr< class IocpObject      >;
 using ListenerPtr        = ExSharedPtr< class Listener        >;
 using SessionPtr         = ExSharedPtr< class Session         >;
+using PacketSessionPtr   = ExSharedPtr< class PacketSession   >;
 using ServerServicePtr   = ExSharedPtr< class ServerService   >;
 using ClientServicePtr   = ExSharedPtr< class ClientService   >;
 using SendBufferPtr      = ExSharedPtr< class SendBuffer      >;

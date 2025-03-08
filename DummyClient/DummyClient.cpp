@@ -9,7 +9,7 @@
 
 #include "pch.h"
 #include "ClientService.h"
-#include "Session.h"
+#include "PacketSession.h"
 #include "SendBuffer.h"
 #include "SendBufferManager.h"
 #include "ThreadManager.h"
@@ -25,7 +25,7 @@ std::shared_ptr< T > SessionFactory()
 }
 
 
-class GameServerSession : public Session
+class GameServerSession : public PacketSession
 {
 public:
     ~GameServerSession()
@@ -36,37 +36,41 @@ public:
     virtual void OnConnected() override final
     {
         cout << "Connected To Server " << endl;
-
-        SendBufferPtr sendBuffer = GSendBufferManager->Open( 4096 );
+        /*SendBufferPtr sendBuffer = GSendBufferManager->Open( 4096 );
         ::memcpy( sendBuffer->GetBuffer(), sendData, sizeof( sendData ) );
         sendBuffer->Close( sizeof( sendData ) );
 
-        Send( sendBuffer );
+        Send( sendBuffer );*/
     }
 
     virtual void OnDisconnected() override final
     {
-        cout << "On Disconnected - DummyClient" << endl;
+        //cout << "On Disconnected - DummyClient" << endl;
     }
 
-    virtual ExInt32 OnReceived( BYTE* buffer, ExInt32 len ) override final
+    virtual ExInt32 OnReceivedPacket( BYTE* buffer, ExInt32 len ) override final
     {
-        cout << "(더미)OnRecv Len = " << len << endl;
+        PacketHeader header = *( reinterpret_cast<PacketHeader*>( buffer ) );
+        //cout << "PakcetId:" << header.id << "Size : " << header.size << endl;
+
+        char recvBuffer[ 4096 ];
+        ::memcpy( recvBuffer, &buffer[ 4 ], header.size - sizeof( PacketHeader ) );
+        cout << recvBuffer << endl;
 
         this_thread::sleep_for( 1s );
 
-        SendBufferPtr sendBuffer = GSendBufferManager->Open( 4096 );
-        ::memcpy( sendBuffer->GetBuffer(), sendData, sizeof( sendData ) );
+        /*SendBufferPtr sendBuffer = GSendBufferManager->Open( 4096 );
+        ::memcpy(  sendBuffer->GetBuffer(), sendData, sizeof( sendData ) );
         sendBuffer->Close( sizeof( sendData ) );
 
-        Send( sendBuffer );
+        Send( sendBuffer );*/
 
         return len;
     }
 
     virtual ExVoid OnSent( ExInt32 len ) override final
     {
-        cout << "(더미)OnSend Len = " << len << endl;
+        //cout << "(더미)OnSend Len = " << len << endl;
     }
 };
 
@@ -88,7 +92,7 @@ int main()
         NetAddress( L"127.0.0.1", 7777 ),
         std::make_shared<IocpCore>(),
         SessionFactory< GameServerSession >, // TODO : SessionManager 등
-        6 );
+        1 );
 
     ASSERT_CRASH( service->Start() );
 
