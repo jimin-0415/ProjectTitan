@@ -31,9 +31,10 @@ protected:
     virtual ExInt32 OnReceived( BYTE* buffer, ExInt32 len ) final;
 
     /// 패킷 수신되었을 때 처리한다
-    virtual ExInt32 OnReceivedPacket( BYTE* buffer, ExInt32 len ) abstract;
+    virtual ExVoid OnReceivedPacket( BYTE* buffer, ExInt32 len ) abstract;
 };
 
+// 임시 패킷 헤더 파일
 struct PacketHeader
 {
     ExInt16 size;

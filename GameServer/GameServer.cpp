@@ -8,12 +8,15 @@
 
 
 #include "pch.h"
+#include "BufferWriter.h"
 #include "ThreadManager.h"
 #include "ServerService.h"
 #include "GameSession.h"
 #include "SendBuffer.h"
 #include "SendBufferManager.h"
+#include "ServerPacketHandler.h"
 #include "GameSessionMaanger.h"
+#include "Protocol.pb.h"
 
 
 template< typename T >
@@ -45,19 +48,33 @@ int main()
         } );
     }
 
-    char SendData[ 1000] = "Hello World !!";
+    char sendData[ 1000] = "Hello World !!";
 
     while ( true )
     {
-        SendBufferPtr sendBuffer = GSendBufferManager->Open( 4096 );
+        Protocol::S_TEST pkt;
+        pkt.set_id( 1000 );
+        pkt.set_hp( 100 );
+        pkt.set_attack( 10 );
 
-        BYTE* buffer = sendBuffer->GetBuffer();
-        reinterpret_cast<PacketHeader*>( buffer )->id = 1;
-        reinterpret_cast<PacketHeader*>( buffer )->size = ( sizeof( SendData ) + sizeof( PacketHeader ) );
+        {
+            Protocol::BuffData* buff = pkt.add_buffs();
+            buff->set_buffid( 100 );
+            buff->set_remiantime( 1.2f );
+            buff->add_victims( 4000 );
+            buff->add_victims( 500 );
+        }
         
-        ::memcpy( &buffer[ 4 ], buffer, sizeof( SendData ) );
-        sendBuffer->Close( sizeof( SendData ) + sizeof( PacketHeader ) );
+        {
+            Protocol::BuffData* buff = pkt.add_buffs();
+            buff->set_buffid( 200 );
+            buff->set_remiantime( 2.2f );
+            buff->add_victims( 7000 );
+            buff->add_victims( 800 );
+        }
 
+        
+        SendBufferPtr sendBuffer = ServerPacketHandler::MakeSendBuffer( pkt );
         GSessionManager.Broadcast( sendBuffer );
 
         this_thread::sleep_for( 500ms );

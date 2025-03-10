@@ -15,13 +15,12 @@
 /**********************************************************************************************************************
 * @brief 생성자
 **********************************************************************************************************************/
-SendBuffer::SendBuffer( SendBufferChunkPtr owner, BYTE* buffer, ExInt32 allocSize )
+SendBuffer::SendBuffer( SendBufferChunkPtr owner, BYTE* buffer, ExUInt32 allocSize )
 :
-_owner( owner ),
-_buffer( buffer),
-_allocSize( allocSize)
+_owner    ( owner     ),
+_buffer   ( buffer    ),
+_allocSize( allocSize )
 {
-
 }
 
 /**********************************************************************************************************************
@@ -34,7 +33,7 @@ SendBuffer::~SendBuffer()
 /**********************************************************************************************************************
 * @brief 버퍼를 닫는다
 **********************************************************************************************************************/
-void SendBuffer::Close( ExInt32 writeSize )
+void SendBuffer::Close( ExUInt32 writeSize )
 {
     ASSERT_CRASH( _allocSize >= writeSize );
     _writeSize = writeSize;

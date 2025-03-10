@@ -144,6 +144,12 @@
     <ClInclude Include="PacketSession.h">
       <Filter>Network\IocpObject</Filter>
     </ClInclude>
+    <ClInclude Include="BufferReader.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferWriter.h">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CorePch.cpp">
@@ -235,6 +241,12 @@
     </ClCompile>
     <ClCompile Include="PacketSession.cpp">
       <Filter>Network\IocpObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferReader.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferWriter.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

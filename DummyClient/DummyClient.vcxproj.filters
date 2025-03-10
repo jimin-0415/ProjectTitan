@@ -7,14 +7,19 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{4a7d9a45-46ef-4fff-90c0-5886c05f65c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Protocol">
+      <UniqueIdentifier>{afe51113-faf3-4d6c-a723-3fb0a2d72b09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DummyClient.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="ClientPacketHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="ClientPacketHandler.h" />
   </ItemGroup>
 </Project>

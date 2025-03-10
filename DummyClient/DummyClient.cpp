@@ -8,7 +8,9 @@
 
 
 #include "pch.h"
+#include "BufferReader.h"
 #include "ClientService.h"
+#include "ClientPacketHandler.h"
 #include "PacketSession.h"
 #include "SendBuffer.h"
 #include "SendBufferManager.h"
@@ -48,24 +50,9 @@ public:
         //cout << "On Disconnected - DummyClient" << endl;
     }
 
-    virtual ExInt32 OnReceivedPacket( BYTE* buffer, ExInt32 len ) override final
+    virtual ExVoid OnReceivedPacket( BYTE* buffer, ExInt32 len ) override final
     {
-        PacketHeader header = *( reinterpret_cast<PacketHeader*>( buffer ) );
-        //cout << "PakcetId:" << header.id << "Size : " << header.size << endl;
-
-        char recvBuffer[ 4096 ];
-        ::memcpy( recvBuffer, &buffer[ 4 ], header.size - sizeof( PacketHeader ) );
-        cout << recvBuffer << endl;
-
-        this_thread::sleep_for( 1s );
-
-        /*SendBufferPtr sendBuffer = GSendBufferManager->Open( 4096 );
-        ::memcpy(  sendBuffer->GetBuffer(), sendData, sizeof( sendData ) );
-        sendBuffer->Close( sizeof( sendData ) );
-
-        Send( sendBuffer );*/
-
-        return len;
+        ClientPacketHandler::HandlerPacket( buffer, len );
     }
 
     virtual ExVoid OnSent( ExInt32 len ) override final

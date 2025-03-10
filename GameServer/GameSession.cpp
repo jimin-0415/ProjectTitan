@@ -13,6 +13,7 @@
 #include "GameSessionMaanger.h"
 #include "SendBuffer.h"
 #include "SendBufferManager.h"
+#include "ServerPacketHandler.h"
 #include "Types.h"
 
 /**********************************************************************************************************************
@@ -57,20 +58,7 @@ ExVoid GameSession::OnSent( ExInt32 len )
 /**********************************************************************************************************************
 * @brief 데이터가 수신되었을 때 처리한다
 **********************************************************************************************************************/
-ExInt32 GameSession::OnReceivedPacket( BYTE* buffer, ExInt32 len )
+ExVoid GameSession::OnReceivedPacket( BYTE* buffer, ExInt32 len )
 {
-    PacketHeader header = *( reinterpret_cast<PacketHeader*>( buffer ) );
-    cout << "PakcetId:" << header.id << "Size : " << header.size << endl;
-
-    SendBufferPtr sendBuffer = GSendBufferManager->Open( 4096 );
-    ::memcpy( sendBuffer->GetBuffer(), buffer, len );
-    sendBuffer->Close( len );
-    
-    // onlyMe
-    // Send( sendBuffer );
-
-    // Broadcast
-    GSessionManager.Broadcast( sendBuffer );
-
-    return len;
+    ServerPacketHandler::HandlerPacket( buffer, len );
 }

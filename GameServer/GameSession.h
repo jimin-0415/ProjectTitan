@@ -38,5 +38,5 @@ public:
     virtual ExVoid OnSent( ExInt32 len ) override final;
 
     /// 데이터가 수신되었을 때 처리한다
-    virtual ExInt32 OnReceivedPacket( BYTE* buffer, ExInt32 len ) override final;
+    virtual ExVoid OnReceivedPacket( BYTE* buffer, ExInt32 len ) override final;
 };

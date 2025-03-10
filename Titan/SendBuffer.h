@@ -25,30 +25,33 @@ private:
     BYTE* _buffer = nullptr;
 
     /// 할당 크기
-    ExInt32 _allocSize = 0;
+    ExUInt32 _allocSize = 0;
 
     /// 쓰기 크기
-    ExInt32 _writeSize = 0;
+    ExUInt32 _writeSize = 0;
 
     /// 송신 버퍼 청크
     SendBufferChunkPtr _owner;
 
 public:
     /// 생성자
-    SendBuffer( SendBufferChunkPtr owner, BYTE* buffer, ExInt32 allocSize );
+    SendBuffer( SendBufferChunkPtr owner, BYTE* buffer, ExUInt32 allocSize );
 
     /// 소멸자
     ~SendBuffer();
 
 public:
     /// 버퍼를 닫는다
-    ExVoid Close( ExInt32 writeSize );
+    ExVoid Close( ExUInt32 writeSize );
 
 public:
     /// 버퍼를 반환한다
     BYTE* GetBuffer() { return _buffer; }
     
+    /// 할당 크기를 반환한다
+    ExUInt32 GetAllcSize() { return _allocSize; }
+
     /// 쓰기 크기를 반환한다
-    ExInt32 GetWriteSize() { return _writeSize; }  
+    ExUInt32 GetWriteSize() { return _writeSize; }
 };
 

@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DummyClient", "DummyClient\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Titan", "Titan\Titan.vcxproj", "{49A3291F-CF19-4274-9D16-7F692503AF70}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Protocol", "Protocol\Protocol.vcxproj", "{CA22072A-BBD6-4864-BECE-5FEE7770B601}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -47,6 +49,14 @@ Global
 		{49A3291F-CF19-4274-9D16-7F692503AF70}.Release|x64.Build.0 = Release|x64
 		{49A3291F-CF19-4274-9D16-7F692503AF70}.Release|x86.ActiveCfg = Release|Win32
 		{49A3291F-CF19-4274-9D16-7F692503AF70}.Release|x86.Build.0 = Release|Win32
+		{CA22072A-BBD6-4864-BECE-5FEE7770B601}.Debug|x64.ActiveCfg = Debug|x64
+		{CA22072A-BBD6-4864-BECE-5FEE7770B601}.Debug|x64.Build.0 = Debug|x64
+		{CA22072A-BBD6-4864-BECE-5FEE7770B601}.Debug|x86.ActiveCfg = Debug|Win32
+		{CA22072A-BBD6-4864-BECE-5FEE7770B601}.Debug|x86.Build.0 = Debug|Win32
+		{CA22072A-BBD6-4864-BECE-5FEE7770B601}.Release|x64.ActiveCfg = Release|x64
+		{CA22072A-BBD6-4864-BECE-5FEE7770B601}.Release|x64.Build.0 = Release|x64
+		{CA22072A-BBD6-4864-BECE-5FEE7770B601}.Release|x86.ActiveCfg = Release|Win32
+		{CA22072A-BBD6-4864-BECE-5FEE7770B601}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
